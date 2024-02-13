@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PaceCrafter
 // @namespace    http://tampermonkey.net/
-// @version      0.1.0
+// @version      0.2.0
 // @description  try to take over the world!
 // @author       You
 // @match        https://www.youtube.com/*
@@ -14,14 +14,17 @@ function startObserve() {
     console.log("startObserve");
 
     const videoPlayerElements = Array.from(document.getElementsByClassName("html5-video-player"));
+    if (videoPlayerElements.length == 0) {
+        setTimeout(startObserve, "100");
+        return;
+    }
     console.log(videoPlayerElements);
     videoPlayerElements.forEach(function (videoPlayerElement) {
         const observer = new MutationObserver(records => {
             checkAd(videoPlayerElement);
         })
         observer.observe(videoPlayerElement, {
-            attributes: true,
-            attributeFilter: ['class']
+            attributes: true
         })
         console.log("##### start observer", videoPlayerElement);
         checkAd(videoPlayerElement);
