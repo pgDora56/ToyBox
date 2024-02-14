@@ -2,8 +2,8 @@
 // @name         PaceCrafter
 // @namespace    http://tampermonkey.net/
 // @version      0.2.0
-// @description  try to take over the world!
-// @author       You
+// @description  Crafting pace
+// @author       Kazuki F.
 // @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
