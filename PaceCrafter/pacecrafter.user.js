@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         PaceCrafter
 // @namespace    http://tampermonkey.net/
-// @version      0.2.0
+// @version      0.2.1
 // @description  Crafting pace
 // @author       Kazuki F.
 // @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
+
+let regularVolume = 0;
 
 function startObserve() {
     'use strict';
@@ -37,6 +39,11 @@ function checkAd(videoPlayerElement) {
         console.log("##### find ad");
         // 広告っぽい
         videos.forEach(function (elem) {
+            if(elem.volume > 0) {
+                regularVolume = elem.volume;
+                elem.volume = 0;
+            }
+
             elem.playbackRate = 16.0;
         });
         document.getElementsByClassName("ytp-ad-skip-button-modern")[0].click()
@@ -45,6 +52,11 @@ function checkAd(videoPlayerElement) {
         console.log("##### not find ad");
         // 広告じゃないっぽい
         videos.forEach(function (elem) {
+            if(elem.volume == 0) {
+                elem.value = regularVolume;
+                regularVolume = 0;
+            }
+
             elem.playbackRate = 1.0;
         });
     }
