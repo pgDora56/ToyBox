@@ -53,7 +53,7 @@ function checkAd(videoPlayerElement) {
         // 広告じゃないっぽい
         videos.forEach(function (elem) {
             if(elem.volume == 0) {
-                elem.value = regularVolume;
+                elem.volume = regularVolume;
                 regularVolume = 0;
             }
 
