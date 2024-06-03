@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PaceCrafter
 // @namespace    http://tampermonkey.net/
-// @version      0.2.1
+// @version      0.3.0
 // @description  Crafting pace
 // @author       Kazuki F.
 // @match        https://www.youtube.com/*
@@ -9,20 +9,22 @@
 // @grant        none
 // ==/UserScript==
 
-let regularVolume = 0;
+var regularVolume = 0;
 
 function startObserve() {
     'use strict';
-    console.log("startObserve");
+
+    // console.log("startObserve");
 
     const videoPlayerElements = Array.from(document.getElementsByClassName("html5-video-player"));
     if (videoPlayerElements.length == 0) {
         setTimeout(startObserve, "100");
         return;
     }
+    setTimeout(checkRendererError, 1000);
     console.log(videoPlayerElements);
     videoPlayerElements.forEach(function (videoPlayerElement) {
-        const observer = new MutationObserver(records => {
+        let observer = new MutationObserver(records => {
             checkAd(videoPlayerElement);
         })
         observer.observe(videoPlayerElement, {
@@ -31,6 +33,15 @@ function startObserve() {
         console.log("##### start observer", videoPlayerElement);
         checkAd(videoPlayerElement);
     });
+}
+
+function checkRendererError() {
+    // console.log("Check render-error");
+    let renderers_error = document.querySelectorAll(".style-scope.yt-playability-error-supported-renderers");
+    if(renderers_error.length != 0) {
+        location.reload();
+    }
+    setTimeout(checkRendererError, 500);
 }
 
 function checkAd(videoPlayerElement) {
@@ -62,4 +73,4 @@ function checkAd(videoPlayerElement) {
     }
 }
 
-setTimeout(startObserve, "1000");
+startObserve();
