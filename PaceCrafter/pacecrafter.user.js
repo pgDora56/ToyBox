@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PaceCrafter
 // @namespace    http://tampermonkey.net/
-// @version      0.3.0
+// @version      0.3.1
 // @description  Crafting pace
 // @author       Kazuki F.
 // @match        https://www.youtube.com/*
@@ -14,7 +14,7 @@ var regularVolume = 0;
 function startObserve() {
     'use strict';
 
-    // console.log("startObserve");
+    debug("startObserve");
 
     const videoPlayerElements = Array.from(document.getElementsByClassName("html5-video-player"));
     if (videoPlayerElements.length == 0) {
@@ -22,7 +22,7 @@ function startObserve() {
         return;
     }
     setTimeout(checkRendererError, 1000);
-    console.log(videoPlayerElements);
+    debug(videoPlayerElements);
     videoPlayerElements.forEach(function (videoPlayerElement) {
         let observer = new MutationObserver(records => {
             checkAd(videoPlayerElement);
@@ -30,24 +30,30 @@ function startObserve() {
         observer.observe(videoPlayerElement, {
             attributes: true
         })
-        console.log("##### start observer", videoPlayerElement);
+        debug("##### start observer", videoPlayerElement);
         checkAd(videoPlayerElement);
     });
 }
 
 function checkRendererError() {
-    // console.log("Check render-error");
-    let renderers_error = document.querySelectorAll(".style-scope.yt-playability-error-supported-renderers");
-    if(renderers_error.length != 0) {
-        location.reload();
+    if(location.pathname == "/watch") {
+        // Watch pageでのみ作動
+        debug("Check render-error");
+        let renderers_error = document.querySelectorAll(".style-scope.yt-playability-error-supported-renderers");
+        if(renderers_error.length != 0) {
+            location.reload();
+        }
+    } else {
+        debug(location.pathname);
     }
+
     setTimeout(checkRendererError, 500);
 }
 
 function checkAd(videoPlayerElement) {
     let videos = document.querySelectorAll("video");
     if (videoPlayerElement.classList.contains("ad-showing")) {
-        console.log("##### find ad");
+        debug("##### find ad");
         // 広告っぽい
         videos.forEach(function (elem) {
             if(elem.volume > 0) {
@@ -60,7 +66,7 @@ function checkAd(videoPlayerElement) {
         document.getElementsByClassName("ytp-ad-skip-button-modern")[0].click()
     }
     else {
-        console.log("##### not find ad");
+        debug("##### not find ad");
         // 広告じゃないっぽい
         videos.forEach(function (elem) {
             if(elem.volume == 0) {
@@ -72,5 +78,10 @@ function checkAd(videoPlayerElement) {
         });
     }
 }
+
+function debug(message) {
+    // console.log("[PaceCrafter:Log] "+message);
+}
+
 
 startObserve();
