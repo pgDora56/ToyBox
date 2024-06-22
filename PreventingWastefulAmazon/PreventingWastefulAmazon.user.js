@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Preventing Wasteful Spending in Amazon
 // @namespace    http://tampermonkey.net/
-// @version      2024.05a
+// @version      2024.06
 // @description  try to take over the world!
 // @author       Dora F.
 // @match        https://www.amazon.co.jp/*
@@ -13,7 +13,7 @@
 
 (function() {
     'use strict';
-    let alertMessage = '<div class="a-box a-alert a-alert-info a-spacing-small" aria-live="polite" aria-atomic="true"><div class="a-box-inner a-alert-container"><h4 class="a-alert-heading">購入確認</h4><i class="a-icon a-icon-alert"></i><div class="a-alert-content"><div data-messageid="unattendedDelivery"><span class="break-word">その買い物、本当に必要ですか？</span><input type="hidden" name="purchaseLevelMessageIds" value="unattendedDelivery"></div></div></div></div>'
+    let alertMessage = '<div class="a-box a-alert a-alert-info a-spacing-small" aria-live="polite" aria-atomic="true"><div class="a-box-inner a-alert-container"><h4 class="a-alert-heading">購入確認</h4><i class="a-icon a-icon-alert"></i><div class="a-alert-content"><div data-messageid="unattendedDelivery"><span class="break-word">その買い物、本当に必要ですか？買ったあと継続して使うものでしょうか？</span><input type="hidden" name="purchaseLevelMessageIds" value="unattendedDelivery"></div></div></div></div>'
 
     let buynow = document.getElementById("buyNow_feature_div");
     if(buynow) {
